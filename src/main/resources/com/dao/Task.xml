@@ -1,0 +1,19 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.TaskDao">
+
+	<resultMap type="com.vo.Task" id="task">
+		<result property="taskName" column="task_name" javaType="String" jdbcType="VARCHAR" />
+        <result property="isOn" column="is_on" javaType="String" jdbcType="VARCHAR" />
+        <result property="intervalTime" column="interval_time" javaType="int" jdbcType="INTEGER" />
+	</resultMap>
+	
+    <select id="getAllTaskByServerId"  parameterType="String" resultType="task">
+        <![CDATA[
+           	SELECT task_name,interval_time,is_on 
+           		FROM timedtask_task_detail 
+           	WHERE id in 
+           		(SELECT task_id FROM timedtask_server_task WHERE server_id=#{server_id})
+		]]>
+    </select>
+</mapper>

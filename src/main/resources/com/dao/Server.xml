@@ -1,0 +1,26 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ServerDao">
+
+	<!-- <parameterType id="Server" type="com.vo.Server">
+	</parameterType>
+ -->
+    <select id="queryServerId"  parameterType="String" resultType="String">
+        <![CDATA[
+           	SELECT
+				opt
+			FROM
+				timedtask_server server
+			WHERE
+				1=1
+			AND 
+				server.server_ip = #{serverIp}
+		]]>
+    </select>
+    
+    <select id="save" parameterType="String">
+        <![CDATA[
+           	insert into timedtask_server(server_ip,server_port,is_on,create_time,update_time) values(#{serverIp},#{serverPort},'1',now(),now());
+		]]>
+    </select>
+</mapper>
