@@ -5,16 +5,22 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.dao.ServerDao;
+import com.pool.ExecutorPool;
 
-public class TaskBoot {
+public class TaskBoot implements ApplicationContextAware{
 
-    @Autowired ServerDao serverDao;
+    @Autowired private ServerDao serverDao;
+    private ApplicationContext applicationContext;
     
     @PostConstruct
     public void init() {
@@ -27,12 +33,14 @@ public class TaskBoot {
         if(serverId == 0) {
             serverDao.save(serverIp, "8080");
         }
-        start();
+        start(serverId);
         return ;
     }
     
-    public void start() {
-        
+    public void start(int serverId) {
+        MainRunner mainRunner = (MainRunner)applicationContext.getBean("mainRunner");
+        mainRunner.setServerId(serverId);
+        ExecutorPool.getInstance().addTask("mainRunner", mainRunner, 0L, 10);
     }
 
     private String getServerIp() {
@@ -59,5 +67,10 @@ public class TaskBoot {
             e.printStackTrace();
         }
         return serverIp;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

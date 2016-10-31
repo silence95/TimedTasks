@@ -4,6 +4,7 @@ public class Task {
 
     private String serverId;
     private String taskName;
+    private String taskType;
     private String isOn;
     private int intervalTime;
 
@@ -37,6 +38,14 @@ public class Task {
 
     public void setIntervalTime(int intervalTime) {
         this.intervalTime = intervalTime;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 
 }

@@ -10,7 +10,7 @@
 	
     <select id="getAllTaskByServerId"  parameterType="String" resultType="task">
         <![CDATA[
-           	SELECT task_name,interval_time,is_on 
+           	SELECT task_name,task_type,interval_time,is_on 
            		FROM timedtask_task_detail 
            	WHERE id in 
            		(SELECT task_id FROM timedtask_server_task WHERE server_id=#{server_id})

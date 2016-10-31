@@ -1,7 +1,9 @@
 package com.pool;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ExecutorPool {
@@ -11,6 +13,8 @@ public class ExecutorPool {
     public static ExecutorPool pool = null;
     
     private ScheduledExecutorService scheduledExecutorService;
+    
+    public static ConcurrentHashMap<String, ScheduledFuture<?>> cacheHashMap = new ConcurrentHashMap<>();
     
     public synchronized static ExecutorPool getInstance() {
        if(pool == null) {
@@ -27,6 +31,7 @@ public class ExecutorPool {
     
     public void addTask(String taskName,Runnable runnable,long initialDelay,int period) {
         System.out.println("增加一个任务" + taskName + "在" + initialDelay + "s后开始执行，间隔执行时间为" + period);
-        scheduledExecutorService.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
+        ScheduledFuture<?> future =  scheduledExecutorService.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
+        cacheHashMap.put(taskName, future);
     }
 }
