@@ -30,7 +30,7 @@ public class ExecutorPool {
     }
     
     public void addTask(String taskName,Runnable runnable,long initialDelay,int period) {
-        System.out.println("增加一个任务" + taskName + "在" + initialDelay + "s后开始执行，间隔执行时间为" + period);
+        System.out.println("增加一个任务" + taskName + "在" + initialDelay + "s后开始执行，间隔执行时间为" + period + "s");
         ScheduledFuture<?> future =  scheduledExecutorService.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
         cacheHashMap.put(taskName, future);
     }

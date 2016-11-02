@@ -1,14 +1,14 @@
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.ServerDao">
 
 	<!-- <parameterType id="Server" type="com.vo.Server">
 	</parameterType>
  -->
-    <select id="queryServerId"  parameterType="String" resultType="String">
+    <select id="queryServerIdByIp"  parameterType="String" resultType="String">
         <![CDATA[
            	SELECT
-				opt
+				id
 			FROM
 				timedtask_server server
 			WHERE

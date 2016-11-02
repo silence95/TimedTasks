@@ -27,7 +27,8 @@ CREATE TABLE `timedtask_task_detail` (
   `interval_time` int(11) NOT NULL COMMENT '循环等待执行时间',
   `is_on` char(1) NOT NULL DEFAULT '' COMMENT '任务是否开启',
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
