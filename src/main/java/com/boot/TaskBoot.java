@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.concurrent.ScheduledFuture;
 
 import javax.annotation.PostConstruct;
 
@@ -17,12 +18,14 @@ import org.springframework.stereotype.Component;
 import com.dao.ServerDao;
 import com.pool.ExecutorPool;
 import com.task.MainRunner;
+import com.vo.Server;
 
 @Component
 public class TaskBoot implements ApplicationContextAware{
 
     @Autowired private ServerDao serverDao;
     private ApplicationContext applicationContext;
+    private ExecutorPool pool = ExecutorPool.getInstance();
     
     @PostConstruct
     public void init() {
@@ -31,19 +34,31 @@ public class TaskBoot implements ApplicationContextAware{
             System.out.println("获得服务器ip失败");
             return ;
         }
-        String serverId = serverDao.queryServerIdByIp(serverIp);
-        if(serverId == null || "".equals(serverId)) {
+        Server server = null;
+        server = serverDao.queryServerIdByIp(serverIp);
+        if(server == null || "".equals(server.getServerId())) {
             serverDao.save(serverIp, "8080");
-            serverId = serverDao.queryServerIdByIp(serverIp);
         }
-        start(Integer.parseInt(serverId));
+        server = serverDao.queryServerIdByIp(serverIp);
+        if("0".equals(server.getIsOn())) {
+            System.out.println(serverIp + " close,please startup");
+        } else {
+            boolean startFlag = start(Integer.parseInt(server.getServerId()));
+            if(!startFlag)
+                System.out.println("main runner run into a exception");
+        }
         return ;
     }
     
-    public void start(int serverId) {
+    public boolean start(int serverId) {
         MainRunner mainRunner = (MainRunner)applicationContext.getBean("mainRunner");
         mainRunner.setServerId(serverId);
-        ExecutorPool.getInstance().addTask("mainRunner", mainRunner, 0L, 10);
+        pool.addTask("mainRunner", mainRunner, 0L, 10);
+        
+        ScheduledFuture<?> future = ExecutorPool.cacheHashMap.get("mainRunner");
+        if(future != null && !future.isCancelled() && !future.isDone())
+            return true;
+        return false;
     /*    MainRunner mainRunnerClone = null;
         try {
             mainRunnerClone = (MainRunner) mainRunner.clone();

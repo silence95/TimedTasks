@@ -4,9 +4,7 @@ public class Prop {
 
     private String taskName;
     private String propName;
-    private String propVal;
-    private String prop_name;
-    private String prop_value;
+    private String propValue;
 
     public String getTaskName() {
         return taskName;
@@ -24,29 +22,12 @@ public class Prop {
         this.propName = propName;
     }
 
-    public String getPropVal() {
-        return propVal;
+    public String getPropValue() {
+        return propValue;
     }
 
-    public void setPropVal(String propVal) {
-        this.propVal = propVal;
+    public void setPropValue(String propValue) {
+        this.propValue = propValue;
     }
-
-    public String getProp_name() {
-        return prop_name;
-    }
-
-    public void setProp_name(String prop_name) {
-        this.prop_name = prop_name;
-    }
-
-    public String getProp_value() {
-        return prop_value;
-    }
-
-    public void setProp_value(String prop_value) {
-        this.prop_value = prop_value;
-    }
-
 
 }

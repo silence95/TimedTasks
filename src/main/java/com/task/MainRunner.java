@@ -38,6 +38,7 @@ public class MainRunner implements Runnable,ApplicationContextAware,Cloneable{
         for(Task task : tasks) {
             createTask(task);
         }
+        System.out.println("目前服务器 " + serverId + " 上正在执行的服务为" + (cacheHashMap.size()-1) + "个");
     }
 
     private void createTask(Task task) {
@@ -49,10 +50,11 @@ public class MainRunner implements Runnable,ApplicationContextAware,Cloneable{
     }
 
     private void dealTaskWhenOff(Task task) {
-        if(cacheHashMap.contains(task.getTaskName())) {
+        if(cacheHashMap.containsKey(task.getTaskName())) {
             ScheduledFuture<?> future = cacheHashMap.get(task.getTaskName());
             future.cancel(false); // 让正在执行中的任务执行完成后再停止
-            cacheHashMap.remove(future);
+            cacheHashMap.remove(task.getTaskName());
+            System.out.println("close a task,name is " + task.getTaskName());
         }
     }
 
@@ -89,7 +91,7 @@ public class MainRunner implements Runnable,ApplicationContextAware,Cloneable{
     }
 
     private boolean isExecutor(String taskName) {
-        if(!cacheHashMap.contains(taskName))
+        if(!cacheHashMap.containsKey(taskName))
             return false;
         ScheduledFuture<?> future = cacheHashMap.get(taskName);
         if(future.isCancelled() || future.isDone()) // isCancelled——已取消，但最后一个任务还未执行完成; isDone——正常或意外中止，取消

@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.PropDao">
 
-    <select id="getValByTaskName"  parameterType="String" resultType="com.vo.Prop">
+	<resultMap type="com.vo.Prop" id="prop">
+		<result property="propName" column="prop_name" javaType="String" jdbcType="VARCHAR" />
+		<result property="propValue" column="prop_value" javaType="String" jdbcType="VARCHAR" />
+		<result property="taskName" column="task_name" javaType="String" jdbcType="VARCHAR" />
+	</resultMap>
+
+    <select id="getValByTaskName"  parameterType="String" resultMap="prop">
         <![CDATA[
            	SELECT prop_name,prop_value 
            		FROM timedtask_task_prop
