@@ -30,8 +30,9 @@ public class CountNum extends AbstractTask {
         System.out.println(getTaskName() + " " + "start");
         for(int i = 0 ; i < val; i++) {
             System.out.println(getTaskName() + i);
+            propDao.updateVal(getTaskName(), "value", i + "");
             try {
-                Thread.sleep(1);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

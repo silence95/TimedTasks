@@ -25,4 +25,11 @@
            	insert into timedtask_server(server_ip,server_port,is_on,create_time,update_time) values(#{serverIp},#{serverPort},'1',now(),now());
 		]]>
     </select>
+    
+     <select id="updateIsOn" parameterType="String">
+        <![CDATA[
+           	update timedtask_server set is_on=#{isOn} WHERE id=#{serverId};
+		]]>
+    </select>
+    
 </mapper>

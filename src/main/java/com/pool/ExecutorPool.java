@@ -1,5 +1,6 @@
 package com.pool;
 
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,5 +34,31 @@ public class ExecutorPool {
         System.err.println("增加一个任务" + taskName + "在" + initialDelay + "s后开始执行，间隔执行时间为" + period + "s");
         ScheduledFuture<?> future =  scheduledExecutorService.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
         cacheHashMap.put(taskName, future);
+    }
+    
+    public void close() {
+        if(cacheHashMap != null && !cacheHashMap.isEmpty()) {
+            Iterator<ScheduledFuture<?>> ite = cacheHashMap.values().iterator();
+            while(ite.hasNext()) {
+                ite.next().cancel(false);
+            }
+        }
+        
+        try {
+            boolean isTerminat = scheduledExecutorService.awaitTermination(10, TimeUnit.SECONDS);
+            if(isTerminat) {
+                System.out.println("定时任务全部结束");
+            } else {
+                System.out.println("定时任务结束失败");
+            }
+
+            scheduledExecutorService.shutdown();
+            if(!scheduledExecutorService.isShutdown())
+                scheduledExecutorService.shutdownNow();
+            
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
     }
 }

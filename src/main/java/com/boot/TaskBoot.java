@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.concurrent.ScheduledFuture;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +42,12 @@ public class TaskBoot implements ApplicationContextAware{
         }
         server = serverDao.queryServerIdByIp(serverIp);
         if("0".equals(server.getIsOn())) {
-            System.out.println(serverIp + " close,please startup");
-        } else {
-            boolean startFlag = start(Integer.parseInt(server.getServerId()));
-            if(!startFlag)
-                System.out.println("main runner run into a exception");
+            System.out.println(serverIp + " close, startup");
+            serverDao.updateIsOn("1",server.getServerId());
         }
+        boolean startFlag = start(Integer.parseInt(server.getServerId()));
+        if(!startFlag)
+            System.out.println("main runner run into a exception");
         return ;
     }
     
@@ -98,5 +99,13 @@ public class TaskBoot implements ApplicationContextAware{
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+    
+    @PreDestroy
+    public void close() {
+        System.out.println("关闭定时任务线程池");
+        if (null != pool) {
+            pool.close();
+        }
     }
 }

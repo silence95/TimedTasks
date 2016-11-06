@@ -11,4 +11,7 @@ public interface ServerDao {
     public Server queryServerIdByIp(String serverIp);
     
     public void save(@Param("serverIp")String serverIp, @Param("serverPort")String serverPort);
+    
+    public void updateIsOn(@Param("isOn")String isOn, @Param("serverId")String serverId);
+    
 }

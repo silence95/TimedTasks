@@ -16,4 +16,10 @@
            		task_name=#{taskName}
 		]]>
     </select>
+    
+     <select id="updateVal" parameterType="String">
+        <![CDATA[
+           	update timedtask_task_prop SET prop_value=#{value} WHERE task_name=#{taskName} AND prop_name=#{valueName}
+		]]>
+    </select>
 </mapper>
